@@ -1,0 +1,96 @@
+Refer as https://www.codeofaninja.com/2017/02/create-simple-rest-api-in-php.html
+
+Destination: MIKE@CODEOFANINJA.COM
+
+Itens Staus:
+ 2 Done
+ 3 Done
+ 4 Done
+ 5 Done
+ 6 Done
+ 7 Done
+ 8 Done but error
+ 9 
+10 
+11 
+
+*** Step 3.2 Dump data for categories table (values 0000-00-00 00:00:00 was modified above):
+
+INSERT INTO `categories` (`id`, `name`, `description`, `created`, `modified`) VALUES
+(1, 'Fashion', 'Category for anything related to fashion.', '2014-06-01 00:35:07', '2014-05-30 17:34:33'),
+(2, 'Electronics', 'Gadgets, drones and more.', '2014-06-01 00:35:07', '2014-05-30 17:34:33'),
+(3, 'Motors', 'Motor sports and more', '2014-06-01 00:35:07', '2014-05-30 17:34:54'),
+(5, 'Movies', 'Movie products.', '0000-00-00 00:00:00', '2016-01-08 13:27:26'),
+(6, 'Books', 'Kindle books, audio books and more.', '0000-00-00 00:00:00', '2016-01-08 13:27:47'),
+(13, 'Sports', 'Drop into new winter gear.', '2016-01-09 02:24:24', '2016-01-09 01:24:24');
+
+#1292 - Incorrect datetime value: '0000-00-00 00:00:00' for column 'created' at row 4
+
+Values "0000-00-00 00:00:00" was modified, see above:
+
+INSERT INTO `categories` (`id`, `name`, `description`, `created`, `modified`) VALUES
+(1, 'Fashion', 'Category for anything related to fashion.', '2014-06-01 00:35:07', '2014-05-30 17:34:33'),
+(2, 'Electronics', 'Gadgets, drones and more.', '2014-06-01 00:35:07', '2014-05-30 17:34:33'),
+(3, 'Motors', 'Motor sports and more', '2014-06-01 00:35:07', '2014-05-30 17:34:54'),
+(5, 'Movies', 'Movie products.', '2015-12-18 11:20:36', '2016-01-08 13:27:26'),
+(6, 'Books', 'Kindle books, audio books and more.', '2016-01-02 10:12:15', '2016-01-08 13:27:47'),
+(13, 'Sports', 'Drop into new winter gear.', '2016-01-09 00:24:24', '2016-01-09 01:24:24');
+
+
+*** Step 7.3 Output
+
+The 'id' before insert product "Amazing Pillow 3.0" was '60' and the 'id' increment is '5'.
+The 'id' after the step '5.3 Output' is '65' not '106'.
+
+{
+    "id" : "65",   
+    "name" : "Amazing Pillow 3.0",
+    "price" : "255",
+    "description" : "The best pillow for amazing programmers.",
+    "category_id" : 2,
+    "created" : "2018-08-01 00:35:07"
+}
+
+*** Step 8.3 Output
+
+{
+    "id" : "62"
+}
+
+Allways show the message if a 'id' exist or not exist: 
+{"message":"Product was deleted."}
+
+As I saw a code to solve this issue in the page: 
+https://stackoverflow.com/questions/44305738/deleting-record-if-it-exists-in-php-pdo
+
+I modified the code of 'function delete()' on 'product.php' from:
+
+   // execute query
+   if($stmt->execute()) {
+
+To:
+
+   // execute query
+   $stmt->execute();
+
+   // check affected rows using rowCount
+   $count = $stmt->rowCount();
+   if ($count > 0) {
+
+The results are:
+
+id = 62 (existent id)
+
+{"message":"Product was deleted."}
+
+
+id = 622 (non existent id)
+
+{"message":"Unable to delete product."}
+
+
+
+
+
+
+
